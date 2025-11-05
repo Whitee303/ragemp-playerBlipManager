@@ -46,8 +46,15 @@ var client = {
             delete allBlips[data.id];
             return;
         }
+    },
+    updateClientAllBlips: function updateClientAllBlips(data) {
+        var blip = allBlips[data.id];
+        if (blip) {
+            blip.position = data.pos;
+        }
     }
 };
 mp.events.add("blips:syncToClient", client.createBlips);
 mp.events.add("blips:callCreateBlip", client.callCreateBlip);
 mp.events.add("blips:syncEvery", client.syncEveryAfterJoin);
+mp.events.add("blips:updateBlips", client.updateClientAllBlips);
