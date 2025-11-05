@@ -10,6 +10,7 @@ interface ClientModule {
 	callCreateBlip: (data: BlipData) => void;
 	syncEveryAfterJoin: (everyBlip: BlipContainer) => void;
 	doRemoveAfterQuit: (data: BlipData) => void;
+	updateClientAllBlips: (data: { id: number; pos: Vector3Mp }) => void;
 }
 interface BlipContainer {
 	[key: number]: BlipMp;
@@ -54,8 +55,15 @@ const client: ClientModule = {
 			return;
 		}
 
+	},
+	updateClientAllBlips (data: { id: number; pos: Vector3Mp }) {
+		const blip = allBlips[data.id];
+		if (blip) {
+			blip.position = data.pos;
+		}
 	}
 };
 mp.events.add('blips:syncToClient', client.createBlips);
 mp.events.add('blips:callCreateBlip', client.callCreateBlip);
 mp.events.add('blips:syncEvery', client.syncEveryAfterJoin);
+mp.events.add('blips:updateBlips', client.updateClientAllBlips);
